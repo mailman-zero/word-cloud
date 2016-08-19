@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_70349_word_cloud.sed_GetWordFrequency</api_name>
+        <client_callable>false</client_callable>
+        <description>Adapted from:&#13;
+http://iamnotagoodartist.com/web/quick-and-dirty-word-frequency-analysis-with-javascript/&#13;
+https://gist.github.com/rocktronica/2625413</description>
+        <name>sed_GetWordFrequency</name>
+        <script><![CDATA[var words = (function(){
+	
+	var sWords = document.body.innerText.toLowerCase().trim().replace(/[,;.]/g,'').split(/[\s\/]+/g).sort();
+	var iWordsCount = sWords.length; // count w/ duplicates
+	
+	// array of words to ignore
+	var ignore = ['and','the','to','a','of','for','as','i','with','it','is','on','that','this','can','in','be','has','if'];
+	ignore = (function(){
+		var o = {}; // object prop checking > in array checking
+		var iCount = ignore.length;
+		for (var i=0;i<iCount;i++){
+			o[ignore[i]] = true;
+		}
+		return o;
+	}());
+	
+	var counts = {}; // object for math
+	for (var i=0; i<iWordsCount; i++) {
+		var sWord = sWords[i];
+		if (!ignore[sWord]) {
+			counts[sWord] = counts[sWord] || 0;
+			counts[sWord]++;
+		}
+	}
+	
+	var arr = []; // an array of objects to return
+	for (sWord in counts) {
+		arr.push({
+			text: sWord,
+			frequency: counts[sWord]
+		});
+	}
+	
+	// sort array by descending frequency | http://stackoverflow.com/a/8837505
+	return arr.sort(function(a,b){
+		return (a.frequency > b.frequency) ? -1 : ((a.frequency < b.frequency) ? 1 : 0);
+	});
+	
+}());
+
+(function(){
+	var iWordsCount = words.length; // count w/o duplicates
+	for (var i=0; i<iWordsCount; i++) {
+		var word = words[i];
+		console.log(word.frequency, word.text);
+	}
+}());]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2016-08-19 00:42:07</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>3a35598a0f5d62008bf745ace1050ea7</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>sed_GetWordFrequency</sys_name>
+        <sys_package display_value="Word Cloud" source="x_70349_word_cloud">3924118a0f5d62008bf745ace1050ebd</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Word Cloud">3924118a0f5d62008bf745ace1050ebd</sys_scope>
+        <sys_update_name>sys_script_include_3a35598a0f5d62008bf745ace1050ea7</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2016-08-19 00:42:07</sys_updated_on>
+    </sys_script_include>
+</record_update>
